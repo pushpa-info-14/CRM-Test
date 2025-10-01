@@ -1,0 +1,56 @@
+@page "/customers"
+@inject Services.CustomerApiService CustomerService
+@using CRMTest.Domain.Entities
+
+<h3>Customers</h3>
+<a class="btn btn-primary mb-2" href="/customers/create">Create New Customer</a>
+
+@if (customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!customers.Any())
+{
+    <p>No customers found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Account ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Date Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var c in customers)
+        {
+            <tr>
+                <td>@c.AccountId</td>
+                <td>@c.FirstName @c.LastName</td>
+                <td>@c.Email</td>
+                <td>@c.PhoneNumber</td>
+                <td>@c.DateCreated.ToShortDateString()</td>
+                <td>
+                    <a class="btn btn-sm btn-info" href="/customers/details/@c.AccountId">Details</a>
+                    <a class="btn btn-sm btn-warning" href="/customers/edit/@c.AccountId">Edit</a>
+                    <a class="btn btn-sm btn-danger" href="/customers/delete/@c.AccountId">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Customer>? customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await CustomerService.GetCustomersAsync();
+    }
+}

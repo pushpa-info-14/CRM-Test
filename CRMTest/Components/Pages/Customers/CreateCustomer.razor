@@ -1,0 +1,59 @@
+@page "/customers/create"
+@inject Services.CustomerApiService CustomerService
+@inject NavigationManager Navigation
+@using CRMTest.Domain.Entities
+@rendermode InteractiveServer
+
+<h3>Create Customer</h3>
+
+<EditForm Model="customer" FormName="CreateCustomerForm" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label>First Name</label>
+        <InputText class="form-control" @bind-Value="customer.FirstName" />
+    </div>
+    <div class="mb-2">
+        <label>Last Name</label>
+        <InputText class="form-control" @bind-Value="customer.LastName" />
+    </div>
+    <div class="mb-2">
+        <label>Email</label>
+        <InputText class="form-control" @bind-Value="customer.Email" />
+    </div>
+    <div class="mb-2">
+        <label>Phone Number</label>
+        <InputText class="form-control" @bind-Value="customer.PhoneNumber" />
+    </div>
+    <div class="mb-2">
+        <label>Address</label>
+        <InputText class="form-control" @bind-Value="customer.Address" />
+    </div>
+    <div class="mb-2">
+        <label>City</label>
+        <InputText class="form-control" @bind-Value="customer.City" />
+    </div>
+    <div class="mb-2">
+        <label>State</label>
+        <InputText class="form-control" @bind-Value="customer.State" />
+    </div>
+    <div class="mb-2">
+        <label>Country</label>
+        <InputText class="form-control" @bind-Value="customer.Country" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a class="btn btn-secondary ms-2" href="/customers">Cancel</a>
+</EditForm>
+
+@code {
+    private Customer customer = new();
+
+    private async Task HandleValidSubmit()
+    {
+        var result = await CustomerService.CreateCustomerAsync(customer);
+        if (result){
+            Navigation.NavigateTo("/customers");
+        }
+    }
+}

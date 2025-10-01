@@ -1,0 +1,48 @@
+@page "/customers/details/{id:int}"
+@inject Services.CustomerApiService CustomerService
+@inject NavigationManager Navigation
+@using CRMTest.Domain.Entities
+
+<h3>Customer Details</h3>
+
+@if (customer == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">Account ID</dt>
+        <dd class="col-sm-10">@customer.AccountId</dd>
+        <dt class="col-sm-2">First Name</dt>
+        <dd class="col-sm-10">@customer.FirstName</dd>
+        <dt class="col-sm-2">Last Name</dt>
+        <dd class="col-sm-10">@customer.LastName</dd>
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@customer.Email</dd>
+        <dt class="col-sm-2">Phone Number</dt>
+        <dd class="col-sm-10">@customer.PhoneNumber</dd>
+        <dt class="col-sm-2">Address</dt>
+        <dd class="col-sm-10">@customer.Address</dd>
+        <dt class="col-sm-2">City</dt>
+        <dd class="col-sm-10">@customer.City</dd>
+        <dt class="col-sm-2">State</dt>
+        <dd class="col-sm-10">@customer.State</dd>
+        <dt class="col-sm-2">Country</dt>
+        <dd class="col-sm-10">@customer.Country</dd>
+        <dt class="col-sm-2">Date Created</dt>
+        <dd class="col-sm-10">@customer.DateCreated.ToShortDateString()</dd>
+    </dl>
+    <a class="btn btn-secondary" href="/customers">Back to List</a>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private Customer? customer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customer = await CustomerService.GetCustomerAsync(id);
+    }
+}

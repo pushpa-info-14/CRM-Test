@@ -1,0 +1,38 @@
+@page "/customers/delete/{id:int}"
+@inject Services.CustomerApiService CustomerService
+@inject NavigationManager Navigation
+@using CRMTest.Domain.Entities
+@rendermode InteractiveServer
+
+<h3>Delete Customer</h3>
+
+@if (customer == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="alert alert-danger">
+        Are you sure you want to delete <strong>@customer.FirstName @customer.LastName</strong>?
+    </div>
+    <button class="btn btn-danger" @onclick="TryDeleteCustomer">Delete</button>
+    <a class="btn btn-secondary ms-2" href="/customers">Cancel</a>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    private Customer? customer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customer = await CustomerService.GetCustomerAsync(id);
+    }
+
+    private async Task TryDeleteCustomer()
+    {
+        var result = await CustomerService.DeleteCustomerAsync(id);
+        if (result){
+            Navigation.NavigateTo("/customers");
+        }
+    }
+}
